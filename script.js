@@ -62,11 +62,12 @@ for (let i = 0; i < responseJson.data.length; i++) {
 
 
 
-function npsApi(search, totalSearch) {
+function npsApi(search, totalSearch, state) {
 
 	console.log("npsApi Started");
 
 	const params = {
+		stateCode: state,
 		limit: totalSearch,
 		q: search
 	};
@@ -92,7 +93,9 @@ function npsApi(search, totalSearch) {
 				return response.json();
 			}
 			throw new Error(response.statusText);
-			//responsse.json())
+			responsse.json()
+
+			
 		})
 		.then(responseJson => showOnSite(responseJson))
 		.catch(err => {
@@ -115,12 +118,14 @@ function submitButton() {
 
 		const stringParam = $('#searchBox').val();
 		const totalSearch = $('#searchTotal').val();
+		const stateCode = $('#state').val();
 
 		console.log(totalSearch);
 		console.log(typeof(totalSearch));
 		let convertTotalSearch = parseInt(totalSearch);
 		console.log(typeof(convertTotalSearch));
-		npsApi(stringParam, convertTotalSearch);
+
+		npsApi(stringParam, convertTotalSearch, stateCode);
 	})
 
 }
