@@ -4,13 +4,20 @@ const apiKey = "QMaBJj8D6giUgcOuGFBUJksec2riTrTgQpvx1C6b";
 
 const apiURL = "https://developer.nps.gov/api/v1/parks";
 
+const stateCodes = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'PR', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'VI', 'WA', 'WV', 'WI', 'WY'];
 
+
+
+for (let i = 0; i < stateCodes.length; i++) {
+		let stateHtml = document.getElementById('state');
+		stateHtml.innerHTML += '<option value="' + stateCodes[i].toLowerCase() + '">' + stateCodes[i] +'</option>';
+
+}
 
 
 function stringCreate(params) {
 
-	//const stringItem = Object.keys(params)
-	//.map(key => `${encodeURIComponet(key)}=${encodeURIComponet(params[key])}`)
+
 	const stringItem = Object.keys(params).map(key =>`${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
 
 		console.log(stringItem.join('&'));
@@ -32,7 +39,11 @@ function showOnSite(responseJson) {
 //need to set max number of results default to 10
 
 // blocking for loop for testing
+		let totalResutlsHtml = document.getElementById('totalResutls');
+		totalResutlsHtml.innerHTML = `Total Number of Resutls: ` + responseJson.data.length;
+
 for (let i = 0; i < responseJson.data.length; i++) {
+
 
 		$('#js-results').append(
 			`
@@ -62,18 +73,21 @@ for (let i = 0; i < responseJson.data.length; i++) {
 
 
 
-function npsApi(search, totalSearch, state) {
+function npsApi(search, totalSearch, states) {
 
 	console.log("npsApi Started");
 
 	const params = {
-		stateCode: state,
+		//stateCode: state,
 		limit: totalSearch,
 		q: search
+		
+		
 	};
 
+
 	const searchString = stringCreate(params);
-	const searchUrl = apiURL + '?' + searchString;
+	const searchUrl = apiURL + '?' + 'stateCode=' + states + '&' + searchString;
 
 	console.log(searchUrl);
 
@@ -83,8 +97,8 @@ function npsApi(search, totalSearch, state) {
 		})
 	}
 
-	console.log(apiKey);
-	console.log(apiURL);
+	//console.log(apiKey);
+	//console.log(apiURL);
 
 	fetch(searchUrl, apiOptions)
 		.then(response => {
@@ -120,12 +134,12 @@ function submitButton() {
 		const totalSearch = $('#searchTotal').val();
 		const stateCode = $('#state').val();
 
-		console.log(totalSearch);
-		console.log(typeof(totalSearch));
+		console.log(stateCode.join('&stateCode='));
+		let convertStateCode = (stateCode.join('&stateCode='))
 		let convertTotalSearch = parseInt(totalSearch);
-		console.log(typeof(convertTotalSearch));
+		
 
-		npsApi(stringParam, convertTotalSearch, stateCode);
+		npsApi(stringParam, convertTotalSearch, convertStateCode);
 	})
 
 }

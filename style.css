@@ -33,3 +33,10 @@ body, main {
 
 	font-weight: bold;
 }
+
+.state {
+	height: 100px;
+	width: 50px;
+	vertical-align: top;
+
+}
