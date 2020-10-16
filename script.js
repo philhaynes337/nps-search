@@ -52,11 +52,8 @@ for (let i = 0; i < responseJson.data.length; i++) {
 				<li class="parkName">${responseJson.data[i].fullName}</li>
 				<li>Description: ${responseJson.data[i].description}</li>
 				<li><A href="${responseJson.data[i].url}" target="_blank">${responseJson.data[i].url}</a>
-				<li>Address:
-				<br>
-				${responseJson.data[i].addresses[0].line1}<br>
-				${responseJson.data[i].addresses[0].city}, ${responseJson.data[i].addresses[0].stateCode} ${responseJson.data[i].addresses[0].postalCode}<br>
-
+			
+				<!-- address code here -->
 
 			</ul>
 			<br>
@@ -64,7 +61,10 @@ for (let i = 0; i < responseJson.data.length; i++) {
 			`);
 
 }
-
+	//<li>Address:
+	//			<br>
+	//			${responseJson.data[i].addresses[0].line1}<br>
+	//			${responseJson.data[i].addresses[0].city}, ${responseJson.data[i].addresses[0].stateCode} ${responseJson.data[i].addresses[0].postalCode}<br>
 	
 
 }
@@ -135,7 +135,7 @@ function submitButton() {
 		const stateCode = $('#state').val();
 
 		console.log(stateCode.join('&stateCode='));
-		let convertStateCode = (stateCode.join('&stateCode='))
+		let convertStateCode = (stateCode.join(','))
 		let convertTotalSearch = parseInt(totalSearch);
 		
 
