@@ -32,13 +32,7 @@ function showOnSite(responseJson) {
 	console.log(responseJson.data[0]);
 
 	$('#js-results').empty();
-//Full name X
-//Description X
-//website url X
-//bonus parks adress
-//need to set max number of results default to 10
 
-// blocking for loop for testing
 
 
 
@@ -85,59 +79,32 @@ function npsApi(search, totalSearch, states) {
 
 
 
-let params = {};
 
 
-if (search === '') {
+
+if (search.length < 1 ) {
 
 	let params = {
 		limit: totalSearch
+
 	};
-}
-
-else {
-		let params = {
-		//stateCode: state,
-		limit: totalSearch,
-		q: search
-		
-		
-	};
-}
-
-
-
-
-
-
+	console.log("if passed");
+	console.log(params);
 
 
 	const searchString = stringCreate(params);
+	console.log(searchString);
 	const searchUrl = apiURL + '?' + 'stateCode=' + states + '&' + searchString;
+	console.log(searchUrl);
 
 
-
-//console.log(responseJson + "This is the responseJson");
-// Below works when search is empty
-//if (responseJson == '[object Object]') {
-//
-//	console.log("Response was undefined");
-//}
-
-
-
-
-	console.log("The search Url is: " + searchUrl);
-
-	
 const apiOptions = {
 		headers: new Headers({
 			"X-Api-Key": apiKey
 		})
 	}
 
-	//console.log(apiKey);
-	//console.log(apiURL);
+
 
 	fetch(searchUrl, apiOptions)
 		.then(response => {
@@ -159,6 +126,65 @@ const apiOptions = {
 			let errorMsg = `${err.message}`;
 			console.log(errorMsg);
 		})
+
+
+}
+
+else {
+		let params = {
+
+		limit: totalSearch,
+		q: search
+		
+		
+	};
+
+		console.log(params);
+
+
+	const searchString = stringCreate(params);
+	console.log(searchString);
+	const searchUrl = apiURL + '?' + 'stateCode=' + states + '&' + searchString;
+	console.log(searchUrl);
+
+
+const apiOptions = {
+		headers: new Headers({
+			"X-Api-Key": apiKey
+		})
+	}
+
+
+
+	fetch(searchUrl, apiOptions)
+		.then(response => {
+			if (response.ok) {
+				console.log("NPS API Response was OK!")
+
+
+				return response.json();
+			
+			}
+			throw new Error(response.statusText);
+			responsse.json()
+
+			
+		})
+		.then(responseJson => showOnSite(responseJson))
+		.catch(err => {
+			console.log("***********CATCH ERROR**********");
+			let errorMsg = `${err.message}`;
+			console.log(errorMsg);
+		})
+	console.log("else passed");
+}
+
+
+
+
+
+
+
 
 
 }
