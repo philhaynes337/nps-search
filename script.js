@@ -39,6 +39,11 @@ function showOnSite(responseJson) {
 //need to set max number of results default to 10
 
 // blocking for loop for testing
+
+
+
+
+
 		let totalResutlsHtml = document.getElementById('totalResutls');
 		totalResutlsHtml.innerHTML = `Total Number of Resutls: ` + responseJson.data.length;
 
@@ -54,6 +59,10 @@ for (let i = 0; i < responseJson.data.length; i++) {
 				<li><A href="${responseJson.data[i].url}" target="_blank">${responseJson.data[i].url}</a>
 			
 				<!-- address code here -->
+				<li>Address:
+				<br>
+				${responseJson.data[i].addresses[0].line1}<br>
+				${responseJson.data[i].addresses[0].city}, ${responseJson.data[i].addresses[0].stateCode} ${responseJson.data[i].addresses[0].postalCode}<br>
 
 			</ul>
 			<br>
@@ -61,10 +70,7 @@ for (let i = 0; i < responseJson.data.length; i++) {
 			`);
 
 }
-	//<li>Address:
-	//			<br>
-	//			${responseJson.data[i].addresses[0].line1}<br>
-	//			${responseJson.data[i].addresses[0].city}, ${responseJson.data[i].addresses[0].stateCode} ${responseJson.data[i].addresses[0].postalCode}<br>
+	
 	
 
 }
@@ -77,21 +83,54 @@ function npsApi(search, totalSearch, states) {
 
 	console.log("npsApi Started");
 
-	const params = {
+
+
+let params = {};
+
+
+if (search === '') {
+
+	let params = {
+		limit: totalSearch
+	};
+}
+
+else {
+		let params = {
 		//stateCode: state,
 		limit: totalSearch,
 		q: search
 		
 		
 	};
+}
+
+
+
+
+
+
 
 
 	const searchString = stringCreate(params);
 	const searchUrl = apiURL + '?' + 'stateCode=' + states + '&' + searchString;
 
-	console.log(searchUrl);
 
-	const apiOptions = {
+
+//console.log(responseJson + "This is the responseJson");
+// Below works when search is empty
+//if (responseJson == '[object Object]') {
+//
+//	console.log("Response was undefined");
+//}
+
+
+
+
+	console.log("The search Url is: " + searchUrl);
+
+	
+const apiOptions = {
 		headers: new Headers({
 			"X-Api-Key": apiKey
 		})
@@ -104,7 +143,10 @@ function npsApi(search, totalSearch, states) {
 		.then(response => {
 			if (response.ok) {
 				console.log("NPS API Response was OK!")
+
+
 				return response.json();
+			
 			}
 			throw new Error(response.statusText);
 			responsse.json()
@@ -117,7 +159,6 @@ function npsApi(search, totalSearch, states) {
 			let errorMsg = `${err.message}`;
 			console.log(errorMsg);
 		})
-
 
 
 }
@@ -134,9 +175,14 @@ function submitButton() {
 		const totalSearch = $('#searchTotal').val();
 		const stateCode = $('#state').val();
 
-		console.log(stateCode.join('&stateCode='));
+		console.log("This is the State Code: " + stateCode);
+		console.log("This is the search box value: " + stringParam);
 		let convertStateCode = (stateCode.join(','))
 		let convertTotalSearch = parseInt(totalSearch);
+
+		if (stringParam === '') {
+			console.log("Search Passed to the if statement");
+		}
 		
 
 		npsApi(stringParam, convertTotalSearch, convertStateCode);
